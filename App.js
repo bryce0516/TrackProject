@@ -13,6 +13,7 @@ import { setNavigator } from './src/navigationRef';
 import { navigationRef } from './src/RootNavigation'
 import { withNavigation, createSwitchNavigator, createCompatNavigatorFactory } from '@react-navigation/compat';
 import ResolveAuthScreen from './src/screens/ResolveAuthScreen'
+import { Provider as LocationProvider} from './src/context/LocationContext'
 
 const loginFlow = createCompatNavigatorFactory(createStackNavigator)(
   {
@@ -20,6 +21,7 @@ const loginFlow = createCompatNavigatorFactory(createStackNavigator)(
     Signin: { screen: SigninScreen },
   }
 );
+
 const trackListFlow = createCompatNavigatorFactory(createStackNavigator)(
   {
     TrackList:{ screen: TrackListScreen },
@@ -34,6 +36,7 @@ const mainFlow = createCompatNavigatorFactory(createBottomTabNavigator)(
     Account: {screen:AccountScreen}
   }
 )
+
 const App = createSwitchNavigator(
   {
     ResolveAuth: {screen: ResolveAuthScreen},
@@ -45,11 +48,12 @@ const App = createSwitchNavigator(
 export default () => {
 
   return (
-    <AuthProvider>
-      <NavigationContainer ref={navigationRef} >
-        <App />
-      </NavigationContainer>
-    </AuthProvider>
-
+    <LocationProvider>
+      <AuthProvider>
+        <NavigationContainer ref={navigationRef} >
+          <App />
+        </NavigationContainer>
+      </AuthProvider>
+    </LocationProvider>
   )
 }
