@@ -5,7 +5,6 @@ let navigationRef
 
 export const setNavigator = (nav) => {
   navigationRef = nav
-  console.log('navigaref',navigationRef)
 }
 
 

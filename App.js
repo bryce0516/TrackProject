@@ -9,12 +9,13 @@ import TrackCreateScreen from './src/screens/TrackCreateScreen'
 import TrackListScreen from './src/screens/TrackListScreen'
 import TrackDetailScreen from './src/screens/TrackDetailScreen'
 import {Provider as AuthProvider} from './src/context/AuthContext'
+import { Provider as LocationProvider} from './src/context/LocationContext'
+import { Provider as TrackProvider} from './src/context/TrackContext'
 import { setNavigator } from './src/navigationRef';
 import { navigationRef } from './src/RootNavigation'
 import { withNavigation, createSwitchNavigator, createCompatNavigatorFactory } from '@react-navigation/compat';
 import ResolveAuthScreen from './src/screens/ResolveAuthScreen'
-import { Provider as LocationProvider} from './src/context/LocationContext'
-
+import {FontAwesome} from 'react-native-vector-icons'
 const loginFlow = createCompatNavigatorFactory(createStackNavigator)(
   {
     Signup: { screen: SignupScreen },
@@ -26,14 +27,42 @@ const trackListFlow = createCompatNavigatorFactory(createStackNavigator)(
   {
     TrackList:{ screen: TrackListScreen },
     TrackDetail:{ screen: TrackDetailScreen },
+  },
+  {
+    navigationOptions:{
+      title: 'Tracks',
+      tabBarIcon:() => (<FontAwesome name="list" size={20} />)
+    }
+  } 
+)
+const TrackCreateFlow = createCompatNavigatorFactory(createStackNavigator)(
+  {
+    TrackCreate: { screen:TrackCreateScreen}
+  },
+  {
+    navigationOptions:{
+      title: 'Add Track',
+      tabBarIcon:() => (<FontAwesome name="plus" size={20} />)
+    }
+  }
+)
+const AccountFlow = createCompatNavigatorFactory(createStackNavigator)(
+  {
+    Account: {screen:AccountScreen}
+  },
+  {
+    navigationOptions:{
+      title: 'Account',
+      tabBarIcon:() => (<FontAwesome name="gear" size={20} />)
+    }
   }
 )
 
 const mainFlow = createCompatNavigatorFactory(createBottomTabNavigator)(
   {
-    tracklist:trackListFlow,
-    TrackCreate: {screen:TrackCreateScreen},
-    Account: {screen:AccountScreen}
+    trackListFlow,
+    TrackCreateFlow,
+    AccountFlow
   }
 )
 
@@ -48,12 +77,14 @@ const App = createSwitchNavigator(
 export default () => {
 
   return (
-    <LocationProvider>
-      <AuthProvider>
-        <NavigationContainer ref={navigationRef} >
-          <App />
-        </NavigationContainer>
-      </AuthProvider>
-    </LocationProvider>
+    <TrackProvider>
+      <LocationProvider>
+        <AuthProvider>
+          <NavigationContainer ref={navigationRef} >
+            <App />
+          </NavigationContainer>
+        </AuthProvider>
+      </LocationProvider>
+    </TrackProvider>
   )
 }

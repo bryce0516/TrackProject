@@ -8,12 +8,14 @@ import { Context as LocationContext} from '../context/LocationContext'
 import useLocation from '../hooks/useLocation'
 import { withNavigationFocus} from '@react-navigation/compat';
 import TrackForm from '../components/TrackForm'
-const TrackCreateScreen = ({isFocused}) => {
-  const { state, addLocation } = useContext(LocationContext)
+import {FontAwesome} from 'react-native-vector-icons'
+const TrackCreateScreen = ({isFocused, navigation}) => {
+
+  const { state: {recording}, addLocation } = useContext(LocationContext)
   const callback = useCallback(location => {
-    addLocation(location, state.recording)
-  }, [state.recording])
-  const [err] = useLocation(isFocused,callback)
+    addLocation(location, recording)
+  }, [recording])
+  const [err] = useLocation(isFocused || recording,callback)
 
   return (
     <SafeAreaView forceInset={{top: 'always'}}>
